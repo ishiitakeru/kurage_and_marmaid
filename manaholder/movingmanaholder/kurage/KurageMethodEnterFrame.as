@@ -214,13 +214,15 @@ public function controllKurage(event:Event):void{
 		//デフォルト
 		default:
 			//何かしている時は人魚の方を向かない
-			if(
-				(this.currentLabel == "eat")
-			){
+			if(this.currentLabel == "eat"){
 				break;
 			}
 			//人魚の方を向く
 			this.directTo(this.myMarmaid);
+			//人魚にマナをあげてる時はモーションを中断させない
+			if(this.currentLabel == "give"){
+				break;
+			}
 			//モーション指定
 			//ムービーの再生位置は「default」に
 			if(this.currentLabel != "default"){
