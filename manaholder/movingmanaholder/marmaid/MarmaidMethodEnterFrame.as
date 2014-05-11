@@ -7,22 +7,7 @@
  * @access public
  */
 public function watchProperty(event:Event):void{
-	//マナが満ちたら光る
-	if(this.mana == 100){
-		if(
-			(this.MarmaidHead.MarmaidHair.currentLabel == "shining")||
-			(this.MarmaidHead.MarmaidBackHairSwing.MarmaidBackHair.currentLabel == "shining")
-		){
-			return;
-		}else{
-			//currentLabelプロパティ：再生中のフレームラベル
-			this.MarmaidHead.MarmaidHair.gotoAndPlay("shining");
-			this.MarmaidHead.MarmaidBackHairSwing.MarmaidBackHair.gotoAndPlay("shining");
-		}
-	}else{
-		//歌っている時の正面モーションには髪の毛パーツ分けがないので髪の毛の再生位置をディフォルトに戻す必要はない。
-	}
-
+	//髪の毛の光るギミックはflaファイルに記述：人魚のムービークリップのフレームアクション
 }//function
 
 
@@ -36,13 +21,14 @@ public function watchProperty(event:Event):void{
  */
 public function waitAndStopTimers(event:Event):void{
 
-	//タイマーのストップ
-	//自分が動作中
-	if(this.currentLabel != "default"){
-		//時間止める
-		this.marmaidTheSeaTimer.stop();
-		this.wanderTimer.stop();
-	}else{
+	//自分が動作中はタイマーをストップ
+	//タイマーを動かす条件：default、、moveback、back_touch
+	if(
+		(this.currentLabel == "default")||
+		(this.currentLabel == "move")||
+		(this.currentLabel == "back")||
+		(this.currentLabel == "back_touch")
+	){
 		//時間止めない
 		if(! this.marmaidTheSeaTimer.running){
 			this.marmaidTheSeaTimer.start();
@@ -50,6 +36,12 @@ public function waitAndStopTimers(event:Event):void{
 		if(! this.wanderTimer.running){
 			this.wanderTimer.start();
 		}
+	}
+	//指定した除外ラベル以外の時は
+	else{
+		//時間止める
+		this.marmaidTheSeaTimer.stop();
+		this.wanderTimer.stop();
 	}
 
 }//function
@@ -73,9 +65,8 @@ public function controllMarmaid(event:Event):void{
 		//クラゲからマナを受け取るとき
 		case "taking_mana_from_kurage":
 			//モーション指定
-			if(this.currentLabel != "takeing_mana_from_kurage"){
-				this.gotoAndPlay("takeing_mana_from_kurage");
-			}
+			this.playLabel(this, "takeing_mana_from_kurage");
+			//髪の毛の光るギミックはflaファイルに記述：人魚のムービークリップのフレームアクション
 			this.setCurrentAction("default");
 			break;
 
@@ -94,9 +85,7 @@ public function controllMarmaid(event:Event):void{
 		case "moving_to_the_place_for_singing":
 			//モーション指定
 			//ムービーの再生位置は「move」に
-			if(this.currentLabel != "move"){
-				this.gotoAndPlay("move");
-			}
+			this.playLabel(this, "move");
 			//目的地に着いたら判定
 			if(this.getIsReadyToNextAction() == true){
 				//目的地に到着したら、「歌っている」ステータスに変更
@@ -107,9 +96,7 @@ public function controllMarmaid(event:Event):void{
 		//歌う
 		case "singing":
 			//モーション指定
-			if(this.currentLabel != "sing"){
-				this.gotoAndPlay("sing");
-			}
+			this.playLabel(this, "sing");
 			//イベントの発動条件チェックはリスナーイベントメソッドで行うためここでは行わない
 			//マナの受け渡し
 			var giving_mana_amount:int = this.getMana();	//クラゲが持っているすべてのマナを与える
@@ -132,11 +119,26 @@ public function controllMarmaid(event:Event):void{
 			){
 				break;
 			}
-			//ムービーの再生位置は「move」に
-			if(this.currentLabel != "move"){
-				this.gotoAndPlay("move");
+
+			//衝突判定して、タッチの当たり判定とクラゲとが重なっていたら
+			//衝突判定して、タッチの当たり判定とクラゲとが重なっていたら
+			if(this.HitTouch.hitTestObject(this.myKurage.Hit)){
+				//後ろ向きにする
+				this.playLabel(this, "back_touch");
+			}else
+			//タッチ判定ではないがクラゲと重なっていたら
+			if(this.Hit.hitTestObject(this.myKurage.Hit)){
+				//後ろ向きにする
+				this.playLabel(this, "back");
 			}
+			//クラゲと重なってなければ
+			else{
+				//ムービーの再生位置は「move」に
+				this.playLabel(this, "move");
+			}//クラゲとの衝突判定
+
 			break;
+
 
 		//デフォルトの時：動作を受けた時に反応する
 		default:
@@ -145,8 +147,6 @@ public function controllMarmaid(event:Event):void{
 			if(this.myKurage.getCurrentAction() == "moving_to_marmaid"){
 				//目的地初期化
 				this.setGoalPlace(this.x, this.y);
-				//クラゲの方を向く
-				this.directTo(this.myKurage);
 			}
 
 			//クラゲが人魚にマナを与えている時、クラゲからマナを受け取っているという状態にする
@@ -154,14 +154,11 @@ public function controllMarmaid(event:Event):void{
 				this.setCurrentAction("taking_mana_from_kurage");
 				//目的地初期化
 				this.setGoalPlace(this.x, this.y);
-				//クラゲの方を向く
-				this.directTo(this.myKurage);
 			}
 
-			//クラゲの方を向く
+			//共通：クラゲの方を向く
 			this.directTo(this.myKurage);
 
-			//ムービーの再生位置は「default」に
 			//クラゲからのマナ受け取りと歌う動作とは中断しない
 			if(
 				(this.currentLabel == "takeing_mana_from_kurage")||
@@ -171,10 +168,23 @@ public function controllMarmaid(event:Event):void{
 			}
 
 			//モーションを初期化
-			//モーションが途中で初期化されてしまう場合、ここに至るまでの間の適切な場所で例外ルートがきちんと作られずにここに処理が来てしまっている
-			if(this.currentLabel != "default"){
-				this.gotoAndPlay("default");
+			//衝突判定して、タッチの当たり判定とクラゲとが重なっていたら
+			if(this.HitTouch.hitTestObject(this.myKurage.Hit)){
+				//後ろ向きにする
+				this.playLabel(this, "back_touch");
+			}else
+			//タッチ判定ではないがクラゲと重なっていたら
+			if(this.Hit.hitTestObject(this.myKurage.Hit)){
+				//後ろ向きにする
+				this.playLabel(this, "back");
 			}
+			//クラゲと重なっていなかったら
+			else{
+				//最終：ムービーの再生位置は「default」に
+				//モーションが途中で初期化されてしまう場合、ここに至るまでの間の適切な場所で例外ルートがきちんと作られずにここに処理が来てしまっている
+				this.playLabel(this, "default");
+			}//クラゲとの衝突判定
+
 			break;
 	}//switch
 

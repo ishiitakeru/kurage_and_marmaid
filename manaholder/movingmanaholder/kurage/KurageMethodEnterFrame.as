@@ -9,10 +9,7 @@
 public function fullManaShine(event:Event):void{
 	//マナが満ちたら光る
 	if(this.mana == 50){
-		if(
-			(this.KurageHead.currentLabel == "shining")||
-			(this.KurageHead.currentLabel == "done_shining")
-		){
+		if(this.KurageHead.currentLabel == "shining"){
 			return;
 		}else{
 			//currentLabelプロパティ：再生中のフレームラベル
@@ -93,9 +90,7 @@ public function controllKurage(event:Event):void{
 		case "moving_to_seaweed":
 			//モーション指定
 			//ムービーの再生位置は「move」に
-			if(this.currentLabel != "move"){
-				this.gotoAndPlay("move");
-			}
+			this.playLabel(this, "move");
 			//目的地に着いたら判定
 			if(this.getIsReadyToNextAction() == true){
 				//目的地に到着したら、「海藻を食べている」ステータスに変更
@@ -105,12 +100,11 @@ public function controllKurage(event:Event):void{
 
 		//海藻を食べている状態
 		case "eating_seaweed":
+			//海藻の方を向く
+			this.directTo(mySeaWeed);
 			//モーション指定
 			//ムービーの再生位置は「eat」に
-			if(this.currentLabel != "eat"){
-				this.directTo(mySeaWeed);
-				this.gotoAndPlay("eat");
-			}
+			this.playLabel(this, "eat");
 			//イベントの発動条件チェックはリスナーイベントメソッドで行うためここでは行わない
 			//マナの受け取り
 			var taking_mana_amount:int = this.mySeaWeed.getMana();	//海藻が持っているすべてのマナをもらう
@@ -135,9 +129,7 @@ public function controllKurage(event:Event):void{
 		case "moving_to_marmaid":
 			//モーション指定
 			//ムービーの再生位置は「move」に
-			if(this.currentLabel != "move"){
-				this.gotoAndPlay("move");
-			}
+			this.playLabel(this, "move");
 			//目的地に着いたら判定
 			if(this.getIsReadyToNextAction() == true){
 				//目的地に到着したら、「人魚にマナを与えている」ステータスに変更
@@ -147,12 +139,11 @@ public function controllKurage(event:Event):void{
 
 		//マーメイドにマナを分けている状態
 		case "giving_mana_to_marmaid":
+			//人魚の方を向く
+			this.directTo(myMarmaid);
 			//モーション指定
 			//ムービーの再生位置は「give」に
-			if(this.currentLabel != "give"){
-				this.directTo(myMarmaid);
-				this.gotoAndPlay("give");
-			}
+			this.playLabel(this, "give");
 			//イベントの発動条件チェックはリスナーイベントメソッドで行うためここでは行わない
 			//マナの受け渡し
 			var giving_mana_amount:int = this.getMana();	//クラゲが持っているすべてのマナを与える
@@ -175,9 +166,7 @@ public function controllKurage(event:Event):void{
 		case "moving_to_place_to_listen_to_marmaids_song":
 			//モーション指定
 			//ムービーの再生位置は「move」に
-			if(this.currentLabel != "move"){
-				this.gotoAndPlay("move");
-			}
+			this.playLabel(this, "move");
 			//目的地に着いたら判定
 			if(this.getIsReadyToNextAction() == true){
 				//目的地に到着したら、「人魚にマナを与えている」ステータスに変更
@@ -187,12 +176,11 @@ public function controllKurage(event:Event):void{
 
 		//人魚の歌を聞いている状態
 		case "listening_to_marmaids_song":
+			//人魚の方を向く
+			this.directTo(myMarmaid);
 			//モーション指定
 			//ムービーの再生位置は「default」に
-			if(this.currentLabel != "default"){
-				this.directTo(myMarmaid);
-				this.gotoAndPlay("default");
-			}
+			this.playLabel(this, "default");
 			//人魚が歌い終わったら行動ステータスをディフォルトに戻す
 			if(this.myMarmaid.currentLabel != "sing"){
 				this.setCurrentAction("default");
@@ -206,9 +194,7 @@ public function controllKurage(event:Event):void{
 		//うろつき
 		case "wandering":
 			//ムービーの再生位置は「move」に
-			if(this.currentLabel != "move"){
-				this.gotoAndPlay("move");
-			}
+			this.playLabel(this, "move");
 			break;
 
 		//デフォルト
@@ -229,9 +215,7 @@ public function controllKurage(event:Event):void{
 			//モーション指定
 			//ムービーの再生位置は「default」に
 			//期待したモーションが再生されずにディフォルトに戻ってしまう時、ここまで処理が来ているので、適切な場所で処理を止めてやる必要がある
-			if(this.currentLabel != "default"){
-				this.gotoAndPlay("default");
-			}
+			this.playLabel(this, "default");
 			break;
 	}//switch
 

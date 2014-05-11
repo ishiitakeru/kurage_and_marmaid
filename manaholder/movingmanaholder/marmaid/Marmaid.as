@@ -13,9 +13,12 @@ package manaholder.movingmanaholder.marmaid{
 
 		//////////////////////////////////////////////////////
 		//プロパティ
+
+		//タイマー/////////////////////////////////////////
 		/** マナ移動：人魚→海のためのタイマーインスタンス */
 		public var marmaidTheSeaTimer:Timer;
 
+		//場所/////////////////////////////////////////
 		/** いちゃつく際の相手の位置の座標 */
 		private var positionForBeingLovedX:Number;
 		private var positionForBeingLovedY:Number;
@@ -23,6 +26,10 @@ package manaholder.movingmanaholder.marmaid{
 		/** 歌うための場所の座標 */
 		private var myPlaceForSingingX:Number;
 		private var myPlaceForSingingY:Number;
+
+		//頻度/////////////////////////////////////////
+		/** 歌う頻度 */
+		private var singFrequencySecond;
 
 
 		//////////////////////////////////////////////////////
@@ -38,7 +45,10 @@ package manaholder.movingmanaholder.marmaid{
 
 			//マナ上限値
 			this.max_mana = 100;
+
+			//マナ初期値
 			this.mana = 0;
+			//this.mana = 100;	//テスト用
 
 			//向き
 			this.direction_default = "right";

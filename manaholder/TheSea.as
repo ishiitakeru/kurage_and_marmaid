@@ -28,6 +28,7 @@ package manaholder{
 		public function TheSea():void{
 			//マナ量初期化
 			this.mana = 100;
+			//this.mana = 0;	//テスト用
 
 			//マナ上限値
 			//この世界のマナ総量

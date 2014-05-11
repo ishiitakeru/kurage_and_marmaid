@@ -50,6 +50,14 @@ package{
 			this.theSea.y = 0;
 			this.addChild(this.theSea);
 
+			//クラゲ
+			this.myKurage = new Kurage();
+			this.myKurage.x = 200;
+			this.myKurage.y = 200;
+			this.addChild(this.myKurage);
+			//目的地座標初期化＝自分のインスタンスの配置座標
+			this.myKurage.beNeutral();
+
 			//人魚
 			this.myMarmaid = new Marmaid();
 			this.myMarmaid.x = 100;
@@ -63,14 +71,6 @@ package{
 			this.myPlaceForSingingY = this.theSea.height / 2;
 			//人魚に歌う場所を通知
 			this.myMarmaid.setPlaceForSinging(this.myPlaceForSingingX, this.myPlaceForSingingY);
-
-			//クラゲ
-			this.myKurage = new Kurage();
-			this.myKurage.x = 200;
-			this.myKurage.y = 200;
-			this.addChild(this.myKurage);
-			//目的地座標初期化＝自分のインスタンスの配置座標
-			this.myKurage.beNeutral();
 
 			//海藻
 			this.mySeaWeed = new SeaWeed();

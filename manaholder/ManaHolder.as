@@ -216,5 +216,23 @@ package manaholder{
 			this.myMarmaid = marmaid;
 		}
 
+
+		//////////////////////////////////////////////////////
+		/** 
+		 * ムービークリップ再生ラベル指定
+		 *
+		 * @param  MovieClip それを再生する主語となるムービークリップ
+		 * @param  String 再生したいムービークリップのフレームラベル名
+		 * @return void
+		 * @access public
+		 */
+		public function playLabel(obj:MovieClip, label:String):void{
+			if(obj.currentLabel != label){
+				obj.gotoAndPlay(label);
+			}
+		}
+
+
+
 	}//class
 }//package

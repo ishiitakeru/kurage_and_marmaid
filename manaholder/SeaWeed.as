@@ -37,7 +37,7 @@ package manaholder{
 			///////////////////
 			//タイマーイベント
 			//海→海藻 海藻が育つスピード
-			this.theSeaSeaWeedTimer = new Timer(3 * 1000);//3秒
+			this.theSeaSeaWeedTimer = new Timer(1 * 1000);//3秒
 			this.theSeaSeaWeedTimer.addEventListener(TimerEvent.TIMER, manaMoveFromTheSeaToSeaWeed);
 			this.theSeaSeaWeedTimer.start();
 

@@ -1,22 +1,25 @@
 //人魚のAIファイル
 //コンストラクタ内で読み込まれる
 
+//歌う頻度（何秒に一度か）
+this.singFrequencySecond = 20;//30秒
+
 //うろつきの頻度（何秒に一度か）
-this.wanderFrequencySecond = 11;
+this.wanderFrequencySecond = 7;//11秒
 
 //気まぐれ値（N回に一度それを行うなどの判定に使う）
-this.kimagureValue = 2;
+this.kimagureValue = 2;//2
 
 
 ///////////////////
 //タイマーイベント
 //人魚→海 人魚が歌う頻度
-this.marmaidTheSeaTimer = new Timer(3 * 1000);//3秒
+this.marmaidTheSeaTimer = new Timer(this.singFrequencySecond * 1000);
 this.marmaidTheSeaTimer.addEventListener(TimerEvent.TIMER, manaMoveFromMarmaidToTheSea);
 this.marmaidTheSeaTimer.start();
 
 //うろつき
-this.wanderTimer = new Timer(this.wanderFrequencySecond * 1000);//うろつき頻度秒
+this.wanderTimer = new Timer(this.wanderFrequencySecond * 1000);
 this.wanderTimer.addEventListener(TimerEvent.TIMER, wander);
 this.wanderTimer.start();
 

@@ -35,6 +35,13 @@ package manaholder.movingmanaholder.kurage{
 		private var placeToListenMarmaidsSongY:Number;
 
 
+		//頻度/////////////////////////////////////////
+		/** 海藻を食べる頻度 */
+		private var eatFrequencySecond;
+		/** 人魚にマナを与える */
+		private var giveManaToMarmaidSecond;
+
+
 		//////////////////////////////////////////////////////
 		//メソッド
 		/** 
