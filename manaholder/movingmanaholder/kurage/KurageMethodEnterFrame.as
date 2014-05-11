@@ -8,7 +8,7 @@
  */
 public function fullManaShine(event:Event):void{
 	//マナが満ちたら光る
-	if(this.mana == 50){
+	if(this.mana == this.max_mana){
 		if(this.KurageHead.currentLabel == "shining"){
 			return;
 		}else{

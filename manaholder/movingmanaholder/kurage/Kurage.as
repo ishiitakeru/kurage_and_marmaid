@@ -54,7 +54,7 @@ package manaholder.movingmanaholder.kurage{
 		public function Kurage():void{
 
 			//マナ上限値
-			this.max_mana = 50;
+			this.max_mana = 20;
 
 			//大きさ調整
 			this.basesize = 0.6;//作成したムービークリップのN倍
